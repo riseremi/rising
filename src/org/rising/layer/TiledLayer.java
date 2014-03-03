@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.rising.player.Stranger;
+import org.rising.player.AbstractPlayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -146,6 +146,6 @@ public class TiledLayer extends Layer {
     }
 
     public void moveLeft() {
-        setX(getX() - Stranger.STEP);
+        setX(getX() - AbstractPlayer.STEP);
     }
 }

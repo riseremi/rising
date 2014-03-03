@@ -4,13 +4,13 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import org.rising.controllers.MoveController;
 import org.rising.layer.TiledLayer;
 import org.rising.player.Player;
 import org.rising.tiles.Tile;
@@ -29,9 +29,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
     private TiledLayer layer;
     private final GameContext context;
     private final JFrame frame;
-    private volatile Point destination = new Point();
     private final boolean[] keys = new boolean[256];
-    private Direction direction = Direction.UNDEFINED;
+    private MoveController moveController;
 
     public static Core getInstance() {
         if (instance == null) {
@@ -55,11 +54,12 @@ public class Core extends Canvas implements Runnable, KeyListener {
             layer = new TiledLayer(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
                     Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
         } catch (IOException ex) {
-            System.out.println("cannot create layer");
+            System.out.println("Cannot create layer.");
         }
 
         context = new GameContext(layer);
-        player = new Player(context, 0, 0, 0, 0, 0, "Test", 100);
+        player = new Player(context, 0, 0, 0, 0, 0, "Player", 100);
+        
         player.setBlocksX(8);
         player.setBlocksY(9);
         player.setY(128);
@@ -67,59 +67,10 @@ public class Core extends Canvas implements Runnable, KeyListener {
         setVisible(true);
     }
 
-    public void stopMoving() {
-        direction = Direction.UNDEFINED;
-        player.resetSequence();
-    }
-
     public void init() {
         running = true;
+        moveController = new MoveController();
         graphicsThread.start();
-
-        Thread testAnimation = new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (direction == Direction.RIGHT) {
-                        if (destination.getX() - player.getX() <= Player.STEP) {
-                            player.setX(destination.x);
-                            stopMoving();
-                        } else {
-                            player.moveRight(layer);
-                        }
-                    }
-                    if (direction == Direction.LEFT) {
-                        if (player.getX() - destination.getX() <= Player.STEP) {
-                            player.setX(destination.x);
-                            stopMoving();
-                        } else {
-                            player.moveLeft(layer);
-                        }
-                    }
-                    if (direction == Direction.UP) {
-                        if (player.getY() - destination.getY() <= Player.STEP) {
-                            player.setY(destination.y);
-                            stopMoving();
-                        } else {
-                            player.moveUp(layer);
-                        }
-                    }
-                    if (direction == Direction.DOWN) {
-                        if (destination.getY() - player.getY() <= Player.STEP) {
-                            player.setY(destination.y);
-                            stopMoving();
-                        } else {
-                            player.moveDown(layer);
-                        }
-                    }
-                    try {
-                        Thread.sleep(25L);
-                    } catch (InterruptedException ex) {
-                    }
-                }
-            }
-        };
-        testAnimation.start();
     }
 
     public Player getPlayer() {
@@ -158,37 +109,39 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public void update() {
-        if (keys[KeyEvent.VK_UP]) {
-            if (direction == Direction.UNDEFINED) {
-                player.getSprite().setShift(0);
-                destination = new Point(player.getX(), player.getY() - Tile.HEIGHT);
-                direction = Direction.UP;
-            }
-        }
-
-        if (keys[KeyEvent.VK_DOWN]) {
-            if (direction == Direction.UNDEFINED) {
-                player.getSprite().setShift(Tile.HEIGHT - Player.STEP);
-                destination = new Point(player.getX(), player.getY() + Tile.HEIGHT);
-                direction = Direction.DOWN;
-            }
-        }
-
-        if (keys[KeyEvent.VK_LEFT]) {
-            if (direction == Direction.UNDEFINED) {
-                player.getSprite().setShift(0);
-                destination = new Point(player.getX() - Tile.WIDTH, player.getY());
-                direction = Direction.LEFT;
-            }
-        }
-
-        if (keys[KeyEvent.VK_RIGHT]) {
-            if (direction == Direction.UNDEFINED) {
-                player.getSprite().setShift(Tile.WIDTH - Player.STEP);
-                destination = new Point(player.getX() + Tile.WIDTH, player.getY());
-                direction = Direction.RIGHT;
-            }
-        }
+        moveController.processMovement(player, keys);
+//        if (keys[KeyEvent.VK_UP]) {
+//            if (direction == Direction.UNDEFINED) {
+//                player.getSprite().setShift(0);
+//                destination = new Point(player.getX(), player.getY() - Tile.HEIGHT);
+//                direction = Direction.UP;
+//            }
+//        }
+//
+//        if (keys[KeyEvent.VK_DOWN]) {
+//            if (direction == Direction.UNDEFINED) {
+//                player.getSprite().setShift(Tile.HEIGHT - Player.STEP);
+//                destination = new Point(player.getX(), player.getY() + Tile.HEIGHT);
+//                direction = Direction.DOWN;
+//            }
+//        }
+//
+//        if (keys[KeyEvent.VK_LEFT]) {
+//            if (direction == Direction.UNDEFINED) {
+//                player.getSprite().setShift(0);
+//                destination = new Point(player.getX() - Tile.WIDTH, player.getY());
+//                direction = Direction.LEFT;
+//            }
+//        }
+//
+//        if (keys[KeyEvent.VK_RIGHT]) {
+//            if (direction == Direction.UNDEFINED) {
+//                player.getSprite().setShift(Tile.WIDTH - Player.STEP);
+//                destination = new Point(player.getX() + Tile.WIDTH, player.getY());
+//                direction = Direction.RIGHT;
+//            }
+//        }
+//    }
     }
 
     @Override
