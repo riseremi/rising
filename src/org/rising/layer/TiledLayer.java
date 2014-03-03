@@ -1,12 +1,12 @@
-package org.snowflake.layer;
+package org.rising.layer;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.snowflake.player.Stranger;
-import org.snowflake.tiles.Tile;
+import org.rising.player.Stranger;
+import org.rising.tiles.Tile;
 
 /**
  * @author LPzhelud use of this class approved by the author 09.11.2012 - 9:15
@@ -45,7 +45,7 @@ public class TiledLayer extends Layer {
         horizontalTilesNumber = width;
         verticalTilesNumber = height;
         try {
-            LayerIO.loadFromFileVersion1("/res/map.m", this);
+            LayerIO.loadFromFileVersion1("/res/map.rsng", this);
         } catch (IOException ex) {
         }
     }

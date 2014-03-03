@@ -1,4 +1,4 @@
-package org.snowflake.tiles;
+package org.rising.tiles;
 
 import java.awt.Dimension;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
-package org.snowflake.player;
+package org.rising.player;
 
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import org.snowflake.game.GameContext;
-import org.snowflake.layer.Sprite;
+import org.rising.game.GameContext;
+import org.rising.layer.Sprite;
 
 /**
  *

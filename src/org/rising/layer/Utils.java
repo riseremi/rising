@@ -1,6 +1,6 @@
-package org.snowflake.layer;
+package org.rising.layer;
 
-import org.snowflake.tiles.Tile;
+import org.rising.tiles.Tile;
 
 /**
  *

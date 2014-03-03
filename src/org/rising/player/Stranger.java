@@ -1,13 +1,13 @@
-package org.snowflake.player;
+package org.rising.player;
 
 import java.awt.Graphics;
 import java.awt.Point;
-import org.snowflake.game.Core;
-import org.snowflake.game.Direction;
-import org.snowflake.game.GameContext;
-import org.snowflake.layer.Sprite;
-import org.snowflake.layer.TiledLayer;
-import org.snowflake.tiles.Tile;
+import org.rising.game.Core;
+import org.rising.game.Direction;
+import org.rising.game.GameContext;
+import org.rising.layer.Sprite;
+import org.rising.layer.TiledLayer;
+import org.rising.tiles.Tile;
 
 /**
  *

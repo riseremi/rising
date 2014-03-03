@@ -1,6 +1,6 @@
-package org.snowflake.game;
+package org.rising.game;
 
-import org.snowflake.layer.TiledLayer;
+import org.rising.layer.TiledLayer;
 
 /**
  * Класс, в котором находятся константы времени выполнения.

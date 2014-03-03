@@ -1,8 +1,8 @@
-package org.snowflake.controllers;
+package org.rising.controllers;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import org.snowflake.game.GameContext;
+import org.rising.game.GameContext;
 
 /**
  *

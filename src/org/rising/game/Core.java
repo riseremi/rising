@@ -1,4 +1,4 @@
-package org.snowflake.game;
+package org.rising.game;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -11,9 +11,9 @@ import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import org.snowflake.layer.TiledLayer;
-import org.snowflake.player.Player;
-import org.snowflake.tiles.Tile;
+import org.rising.layer.TiledLayer;
+import org.rising.player.Player;
+import org.rising.tiles.Tile;
 
 /**
  *

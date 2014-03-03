@@ -1,4 +1,4 @@
-package org.snowflake.game;
+package org.rising.game;
 
 /**
  *
