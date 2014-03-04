@@ -3,6 +3,7 @@ package org.rising.player;
 import java.awt.Point;
 import org.rising.game.Core;
 import org.rising.game.Direction;
+import org.rising.game.World;
 
 /**
  *
@@ -13,8 +14,10 @@ public class PlayerAnimation implements Runnable {
     @Override
     public void run() {
         while (true) {
+            World world = Core.getInstance().getWorld();
             Player player = Core.getInstance().getPlayer();
             Point destination = player.getDestination();
+
             if (player.getDirection() == Direction.RIGHT) {
                 if (destination.getX() - player.getX() <= Player.STEP) {
                     player.setX(destination.x);

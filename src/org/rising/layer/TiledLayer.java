@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import org.rising.player.AbstractPlayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -116,7 +115,7 @@ public class TiledLayer extends Layer {
 
     //отрисовка слоя, при этом рисуются только помещающиеся на экран тайлы
     @Override
-    protected void paintLayer(Graphics g) {
+    protected void paintLayer(Graphics g) throws ArrayIndexOutOfBoundsException {
         for (int i = 0; i < paintWidth; i++) {
             for (int j = 0; j < paintHeight; j++) {
                 paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
@@ -129,6 +128,6 @@ public class TiledLayer extends Layer {
     }
 
     public void moveLeft() {
-        setX(getX() - AbstractPlayer.STEP);
+        setX(getX() - tileWidth);
     }
 }

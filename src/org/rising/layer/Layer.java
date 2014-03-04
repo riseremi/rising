@@ -28,6 +28,7 @@ public abstract class Layer {
         g.translate(-x, -y);
     }
 
+    //for paint non-tile-size player with offset in the right place
     public void paint(Graphics g, int dx, int dy) {
         g.translate(x - dx, y - dy);
         paintLayer(g);

@@ -37,8 +37,12 @@ public class World {
 //                    layer.setTile(x, y, nullLayer[x][y]);
 //                }
 //            }
-        
-        layer.paint(g);
+
+        try {
+            layer.paint(g);
+        } catch (Exception ex) {
+        }
+
         g.setColor(Color.WHITE);
         for (int i = 0; i < nullLayer.length; i++) {
             for (int j = 0; j < nullLayer[0].length; j++) {
