@@ -26,7 +26,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
     private boolean running = false;
     private final Player player;
     private static Core instance;
-    private TiledLayer layer;
+//    private TiledLayer layer;
+    private World world;
     private final GameContext context;
     private final JFrame frame;
     private final boolean[] keys = new boolean[256];
@@ -51,20 +52,26 @@ public class Core extends Canvas implements Runnable, KeyListener {
         graphicsThread = new Thread(this, "Display");
         Tile.init();
         try {
-            layer = new TiledLayer(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
+            world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
                     Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
+            //layer = new TiledLayer(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
+            //      Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
         } catch (IOException ex) {
             System.out.println("Cannot create layer.");
         }
 
-        context = new GameContext(layer);
+        context = new GameContext(world);
         player = new Player(context, 0, 0, 0, 0, 0, "Player", 100);
-        
+
         player.setBlocksX(8);
         player.setBlocksY(9);
         player.setY(128);
 
         setVisible(true);
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public void init() {
@@ -78,7 +85,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public TiledLayer getLayer() {
-        return layer;
+        return world.getLayer();
     }
 
     @Override
@@ -101,7 +108,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 640, 480);
 
-        layer.paint(g);
+        //world.getLayer().paint(g);
+        world.paint(g);
         player.paint(g);
 
         g.dispose();

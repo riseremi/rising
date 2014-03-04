@@ -27,7 +27,6 @@ public abstract class AbstractPlayer {
     private volatile Point destination = new Point();
     private Direction direction = Direction.UNDEFINED;
     protected PlayerAnimation playerAnimation;
-    
 
     public void stopMoving() {
         resetSequence();
@@ -122,7 +121,7 @@ public abstract class AbstractPlayer {
         int oldX = getX(), oldY = getY();
         setX(oldX + deltaX);
         setY(oldY + deltaY);
-        if (!context.getLayer().getTile(getBlocksX(), getBlocksY()).canWalk()) {
+        if (!context.getWorld().canWalk(getBlocksX(), getBlocksY())) {
             setX(oldX);
             setY(oldY);
             stopMoving();

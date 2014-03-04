@@ -9,14 +9,18 @@ import org.rising.layer.TiledLayer;
  */
 public class GameContext {
 
-    private final TiledLayer layer;
+    private final World world;
 
-    public GameContext(TiledLayer layer) {
-        this.layer = layer;
+    public GameContext(World layer) {
+        this.world = layer;
     }
 
     public TiledLayer getLayer() {
-        return layer;
+        return world.getLayer();
+    }
+
+    public World getWorld() {
+        return world;
     }
 
 }

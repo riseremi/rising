@@ -2,7 +2,6 @@ package org.rising.layer;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.rising.player.AbstractPlayer;
@@ -15,7 +14,6 @@ import org.rising.tiles.Tile;
 public class TiledLayer extends Layer {
 
     private final Tile[][] map;//[x][y]
-    private final int[][] visiblity;//[x][y] 
     private final BufferedImage[] tiles;
     private final int tileWidth, tileHeight;
     private final int horizontalTilesNumber, verticalTilesNumber;
@@ -41,13 +39,9 @@ public class TiledLayer extends Layer {
             }
         }
 
-        visiblity = new int[width][height];
         horizontalTilesNumber = width;
         verticalTilesNumber = height;
-        try {
-            LayerIO.loadFromFileVersion1("/res/map.rsng", this);
-        } catch (IOException ex) {
-        }
+        
     }
 
     public int getHorizontalTilesNumber() {
@@ -108,16 +102,8 @@ public class TiledLayer extends Layer {
         return map[x][y];
     }
 
-    public int[][] getVisiblity() {
-        return visiblity;
-    }
-
     public Tile getTileObject(int x, int y) {
         return map[x][y];
-    }
-
-    public void setVisiblity(int x, int y, int state) {
-        visiblity[x][y] = state;
     }
 
     public void fillRectTile(int x, int y, int w, int h, int tileId) {
@@ -133,16 +119,13 @@ public class TiledLayer extends Layer {
     protected void paintLayer(Graphics g) {
         for (int i = 0; i < paintWidth; i++) {
             for (int j = 0; j < paintHeight; j++) {
-                //try {
                 paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
-                //} catch (Exception ex) {
-                //}
             }
         }
     }
 
     protected void paintTile(Graphics g, int x, int y, int id) {
-        g.drawImage(tiles[id], x, y, null);
+        g.drawImage(tiles[Math.abs(id)], x, y, null);
     }
 
     public void moveLeft() {
