@@ -19,10 +19,9 @@ public class MoveController {
         if (keys[KeyEvent.VK_UP]) {
             if (player.getDirection() == Direction.UNDEFINED) {
                 TiledLayer layer = world.getLayer();
-                player.getSprite().setShift(0);
+//                layer.setShift(Tile.HEIGHT - AbstractPlayer.STEP);
                 layer.setDestination(new Point(layer.getX(), layer.getY() + Tile.HEIGHT));
                 player.setDirection(Direction.UP);
-//mumbo-jumbo
 //                player.setDestination(new Point(player.getX(), player.getY() - Tile.HEIGHT));
             }
         }
@@ -30,7 +29,7 @@ public class MoveController {
         if (keys[KeyEvent.VK_DOWN]) {
             if (player.getDirection() == Direction.UNDEFINED) {
                 TiledLayer layer = world.getLayer();
-                player.getSprite().setShift(Tile.HEIGHT - Player.STEP);
+                layer.setShift(0);
                 layer.setDestination(new Point(layer.getX(), layer.getY() - Tile.HEIGHT));
                 player.setDirection(Direction.DOWN);
 
@@ -40,14 +39,14 @@ public class MoveController {
 
         if (keys[KeyEvent.VK_LEFT]) {
             if (player.getDirection() == Direction.UNDEFINED) {
-//                player.getSprite().setShift(0);
 //                player.setDestination(new Point(player.getX() - Tile.WIDTH, player.getY()));
 //                player.setDirection(Direction.LEFT);
                 TiledLayer layer = world.getLayer();
-                player.getSprite().setShift(0);
+//                layer.setShift(Tile.WIDTH - AbstractPlayer.STEP);
                 layer.setDestination(new Point(layer.getX() + Tile.WIDTH, layer.getY()));
                 player.setDirection(Direction.LEFT);
 
+//                System.out.println((player.getBlocksX() - layer.getBlocksX()) + ":" + (player.getBlocksY() - layer.getBlocksY()));
             }
         }
 
@@ -57,7 +56,7 @@ public class MoveController {
 //                player.setDestination(new Point(player.getX() + Tile.WIDTH, player.getY()));
 //                player.setDirection(Direction.RIGHT);
                 TiledLayer layer = world.getLayer();
-                player.getSprite().setShift(Tile.WIDTH - Player.STEP);
+                layer.setShift(0);
                 layer.setDestination(new Point(layer.getX() - Tile.WIDTH, layer.getY()));
                 player.setDirection(Direction.RIGHT);
             }

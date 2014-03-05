@@ -5,6 +5,7 @@ import java.awt.Point;
 import org.rising.game.Direction;
 import org.rising.game.GameContext;
 import org.rising.layer.Sprite;
+import org.rising.layer.TiledLayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -75,8 +76,7 @@ public abstract class AbstractPlayer {
         //ts.setY(ty - Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         //ts.setY(ty + Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
-        
-        g.drawRect((getBlocksX() - context.getWorld().getLayer().getBlocksX()) * 16, (getBlocksY() - context.getWorld().getLayer().getBlocksY()) * 16, 16, 16);
+
 
         //g.drawRect(getBlocksX() * 16, getBlocksY() * 16, 16, 16);
     }
@@ -113,21 +113,21 @@ public abstract class AbstractPlayer {
         sprite.setY(y);
     }
 
-//</editor-fold>
     public Sprite getSprite() {
         return sprite;
     }
 
     private void move(int deltaX, int deltaY) {
+        final TiledLayer layer = context.getWorld().getLayer();
         sprite.nextStep();
-        int oldX = getX(), oldY = getY();
-        setX(oldX + deltaX);
-        setY(oldY + deltaY);
-        if (!context.getWorld().canWalk(getBlocksX() - context.getWorld().getLayer().getBlocksX(), getBlocksY() - context.getWorld().getLayer().getBlocksY())) {
+        int oldX = layer.getX(), oldY = layer.getY();
+        layer.setX(oldX + deltaX);
+        layer.setY(oldY + deltaY);
+        if (!context.getWorld().canWalk(getBlocksX() - layer.getBlocksX(), getBlocksY() - layer.getBlocksY())) {
             stopMoving();
+            layer.setX(oldX);
+            layer.setY(oldY);
         }
-        setX(oldX);
-        setY(oldY);
     }
 
     public void moveUp() {
@@ -153,25 +153,25 @@ public abstract class AbstractPlayer {
     //animate without moving
     public void right() {
         sprite.setSpriteQueueSteps(consequences[RIGHT_CONSEQUENCE]);
-        move(STEP, 0);
+        move(-STEP, 0);
     }
 
     //animate without moving
     public void left() {
         sprite.setSpriteQueueSteps(consequences[LEFT_CONSEQUENCE]);
-        move(-STEP, 0);
+        move(STEP, 0);
     }
 
     //animate without moving
     public void up() {
         sprite.setSpriteQueueSteps(consequences[UP_CONSEQUENCE]);
-        move(0, -STEP);
+        move(0, STEP);
     }
 
     //animate without moving
     public void down() {
         sprite.setSpriteQueueSteps(consequences[DOWN_CONSEQUENCE]);
-        move(0, STEP);
+        move(0, -STEP);
     }
 
     public void resetSequence() {

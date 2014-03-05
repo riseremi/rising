@@ -53,7 +53,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
         Tile.init();
         try {
             world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
-                    Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
+                    Tile.WIDTH, Tile.HEIGHT, 40, 30, 41, 31);
             //layer = new TiledLayer(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
             //      Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
         } catch (IOException ex) {

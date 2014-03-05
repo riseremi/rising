@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import org.rising.player.AbstractPlayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -20,6 +19,7 @@ public class TiledLayer extends Layer {
     private final int horizontalTilesNumber, verticalTilesNumber;
     private final int paintWidth, paintHeight;
     private Point destination;
+//    private int shift;
 
     public TiledLayer(BufferedImage image, int tileWidth, int tileHeight,
             int width, int height, int paintWidth, int paintHeight) {
@@ -127,6 +127,9 @@ public class TiledLayer extends Layer {
     //отрисовка слоя, при этом рисуются только помещающиеся на экран тайлы
     @Override
     protected void paintLayer(Graphics g) {
+        int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
+        int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
+
         for (int i = 0; i < paintWidth; i++) {
             for (int j = 0; j < paintHeight; j++) {
 //                paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
@@ -138,33 +141,32 @@ public class TiledLayer extends Layer {
                 int x = i - super.getBlocksX(), y = j - super.getBlocksY();
 
                 if ((x >= 0) && (y >= 0) && (x < horizontalTilesNumber) && (y < verticalTilesNumber)) {
-                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
+                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId(), xRemainder, yRemainder);
                 }
             }
         }
     }
 
-    protected void paintTile(Graphics g, int x, int y, int id) {
+    protected void paintTile(Graphics g, int x, int y, int id, int offX, int offY) {
 //        g.drawImage(tiles[Math.abs(id)], x + (getX() % Tile.WIDTH), y + (getY() % Tile.HEIGHT), null);
-        int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
-        int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
-        g.drawImage(tiles[Math.abs(id)], x + xRemainder, y + yRemainder, null);
+
+        g.drawImage(tiles[Math.abs(id)], x + offX, y + offY, null);
 //        g.drawImage(tiles[Math.abs(id)], x, y, null);
     }
 
-    public void moveLeft() {
-        setX(getX() - AbstractPlayer.STEP);
-    }
-
-    public void moveRight() {
-        setX(getX() + AbstractPlayer.STEP);
-    }
-
-    public void moveUp() {
-        setY(getY() - AbstractPlayer.STEP);
-    }
-
-    public void moveDown() {
-        setY(getY() + AbstractPlayer.STEP);
-    }
+//    public void moveLeft() {
+//        setX(getX() - AbstractPlayer.STEP);
+//    }
+//
+//    public void moveRight() {
+//        setX(getX() + AbstractPlayer.STEP);
+//    }
+//
+//    public void moveUp() {
+//        setY(getY() - AbstractPlayer.STEP);
+//    }
+//
+//    public void moveDown() {
+//        setY(getY() + AbstractPlayer.STEP);
+//    }
 }

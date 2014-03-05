@@ -31,7 +31,7 @@ public class PlayerAnimation implements Runnable {
                     player.stopMoving();
                 } else {
                     player.right();
-                    world.getLayer().moveLeft();
+                    //world.getLayer().moveLeft();
                 }
             }
             if (player.getDirection() == Direction.LEFT) {
@@ -46,7 +46,6 @@ public class PlayerAnimation implements Runnable {
                     player.stopMoving();
                 } else {
                     player.left();
-                    world.getLayer().moveRight();
                 }
             }
             if (player.getDirection() == Direction.UP) {
@@ -61,7 +60,7 @@ public class PlayerAnimation implements Runnable {
                     player.stopMoving();
                 } else {
                     player.up();
-                    world.getLayer().moveDown();
+//                    world.getLayer().moveDown();
                 }
             }
             if (player.getDirection() == Direction.DOWN) {
@@ -76,7 +75,7 @@ public class PlayerAnimation implements Runnable {
                     player.stopMoving();
                 } else {
                     player.down();
-                    world.getLayer().moveUp();
+//                    world.getLayer().moveUp();
                 }
             }
             try {
