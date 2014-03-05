@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import org.rising.controllers.MoveController;
+import org.rising.layer.LayerIO;
 import org.rising.layer.TiledLayer;
 import org.rising.player.Player;
 import org.rising.tiles.Tile;
@@ -20,18 +21,18 @@ import org.rising.tiles.Tile;
  * @author Riseremi
  */
 public class Core extends Canvas implements Runnable, KeyListener {
-
+//java.lang.ClassFormatError: Incompatible magic value 0 in class file org/rising/player/AbstractPlayer
     private static final long serialVersionUID = 1L;
     private final Thread graphicsThread;
     private boolean running = false;
     private final Player player;
     private static Core instance;
-//    private TiledLayer layer;
     private World world;
     private final GameContext context;
     private final JFrame frame;
     private final boolean[] keys = new boolean[256];
     private MoveController moveController;
+    private Camera camera;
 
     public static Core getInstance() {
         if (instance == null) {
@@ -53,20 +54,22 @@ public class Core extends Canvas implements Runnable, KeyListener {
         Tile.init();
         try {
             world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
-                    Tile.WIDTH, Tile.HEIGHT, 40, 30, 41, 31);
-            //layer = new TiledLayer(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
-            //      Tile.WIDTH, Tile.HEIGHT, 40, 30, 40, 30);
+                    Tile.WIDTH, Tile.HEIGHT, LayerIO.mapW, LayerIO.mapH, 41, 31);
         } catch (IOException ex) {
             System.out.println("Cannot create layer.");
         }
-
-        context = new GameContext(world);
+        camera = new Camera();
+        context = new GameContext(world, camera);
         player = new Player(context, 0, 0, 0, 0, 0, "Player", 100);
 
-        player.setBlocksX(world.getLayer().getHorizontalTilesNumber() / 2);
-        player.setBlocksY(world.getLayer().getVerticalTilesNumber() / 2);
+        player.setBlocksX(world.getLayer().getPaintWidth() / 2);
+        player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
         setVisible(true);
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
     public World getWorld() {
@@ -107,15 +110,17 @@ public class Core extends Canvas implements Runnable, KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 640, 480);
 
+        camera.moveCamera(g);
         world.paint(g);
         player.paint(g);
+        camera.unmoveCamera(g);
 
         g.dispose();
         bs.show();
     }
 
     public void update() {
-        moveController.processMovement(player, world, keys);
+        moveController.processMovement(context, player, keys);
     }
 
     @Override

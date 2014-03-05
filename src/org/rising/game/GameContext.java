@@ -10,13 +10,19 @@ import org.rising.layer.TiledLayer;
 public class GameContext {
 
     private final World world;
+    private final Camera camera;
 
-    public GameContext(World layer) {
+    public GameContext(World layer, Camera camera) {
         this.world = layer;
+        this.camera = camera;
     }
 
     public TiledLayer getLayer() {
         return world.getLayer();
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 
     public World getWorld() {

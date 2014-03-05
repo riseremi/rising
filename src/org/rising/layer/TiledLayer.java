@@ -19,7 +19,15 @@ public class TiledLayer extends Layer {
     private final int horizontalTilesNumber, verticalTilesNumber;
     private final int paintWidth, paintHeight;
     private Point destination;
+
 //    private int shift;
+    public int getPaintWidth() {
+        return paintWidth;
+    }
+
+    public int getPaintHeight() {
+        return paintHeight;
+    }
 
     public TiledLayer(BufferedImage image, int tileWidth, int tileHeight,
             int width, int height, int paintWidth, int paintHeight) {
@@ -127,11 +135,11 @@ public class TiledLayer extends Layer {
     //отрисовка слоя, при этом рисуются только помещающиеся на экран тайлы
     @Override
     protected void paintLayer(Graphics g) {
-        int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
-        int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
 
-        for (int i = 0; i < paintWidth; i++) {
-            for (int j = 0; j < paintHeight; j++) {
+        //int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
+        //int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
+        for (int i = 0; i < paintWidth * 2; i++) {
+            for (int j = 0; j < paintHeight * 2; j++) {
 //                paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
                 //допустим, карта в -1; 0
                 //тогда нужно рисовать с тайла 1; 0
@@ -141,16 +149,16 @@ public class TiledLayer extends Layer {
                 int x = i - super.getBlocksX(), y = j - super.getBlocksY();
 
                 if ((x >= 0) && (y >= 0) && (x < horizontalTilesNumber) && (y < verticalTilesNumber)) {
-                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId(), xRemainder, yRemainder);
+                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
                 }
             }
         }
     }
 
-    protected void paintTile(Graphics g, int x, int y, int id, int offX, int offY) {
+    protected void paintTile(Graphics g, int x, int y, int id) {
 //        g.drawImage(tiles[Math.abs(id)], x + (getX() % Tile.WIDTH), y + (getY() % Tile.HEIGHT), null);
 
-        g.drawImage(tiles[Math.abs(id)], x + offX, y + offY, null);
+        g.drawImage(tiles[Math.abs(id)], x, y, null);
 //        g.drawImage(tiles[Math.abs(id)], x, y, null);
     }
 

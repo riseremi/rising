@@ -11,7 +11,7 @@ import org.rising.game.World;
  * @author Riseremi
  */
 public class LayerIO {
-    private static final int mapW = 40, mapH = 30;
+    public static final int mapW = 40 * 2, mapH = 30 * 2;
 
     public static void loadFromFileVersion1(String fileName, World world) throws IOException {
         InputStream reader = LayerIO.class.getResourceAsStream(fileName);

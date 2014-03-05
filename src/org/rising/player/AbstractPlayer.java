@@ -2,10 +2,10 @@ package org.rising.player;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import org.rising.game.Camera;
 import org.rising.game.Direction;
 import org.rising.game.GameContext;
 import org.rising.layer.Sprite;
-import org.rising.layer.TiledLayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -77,7 +77,6 @@ public abstract class AbstractPlayer {
         ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         //ts.setY(ty + Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
 
-
         //g.drawRect(getBlocksX() * 16, getBlocksY() * 16, 16, 16);
     }
 
@@ -118,15 +117,22 @@ public abstract class AbstractPlayer {
     }
 
     private void move(int deltaX, int deltaY) {
-        final TiledLayer layer = context.getWorld().getLayer();
+        final Camera camera = context.getCamera();
         sprite.nextStep();
-        int oldX = layer.getX(), oldY = layer.getY();
-        layer.setX(oldX + deltaX);
-        layer.setY(oldY + deltaY);
-        if (!context.getWorld().canWalk(getBlocksX() - layer.getBlocksX(), getBlocksY() - layer.getBlocksY())) {
+        int oldX = getX(), oldY = getY();
+        int cameraOldX = camera.getX(), cameraOldY = camera.getY();
+        setX(oldX + deltaX);
+        setY(oldY + deltaY);
+        camera.setX((camera.getX() - deltaX) /*/ Tile.WIDTH * Tile.WIDTH*/);
+        camera.setY((camera.getY() - deltaY) /*/ Tile.HEIGHT * Tile.HEIGHT*/);
+//        System.out.println(camera.getX() + ":" + camera.getY());
+
+        if (!context.getWorld().canWalk(getBlocksX(), getBlocksY())) {
             stopMoving();
-            layer.setX(oldX);
-            layer.setY(oldY);
+            setX(oldX);
+            setY(oldY);
+            camera.setY(cameraOldY);
+            camera.setX(cameraOldX);
         }
     }
 
