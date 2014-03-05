@@ -22,7 +22,7 @@ public class MoveController {
                 player.getSprite().setShift(0);
                 layer.setDestination(new Point(layer.getX(), layer.getY() + Tile.HEIGHT));
                 player.setDirection(Direction.UP);
-
+//mumbo-jumbo
 //                player.setDestination(new Point(player.getX(), player.getY() - Tile.HEIGHT));
             }
         }
