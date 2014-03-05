@@ -38,16 +38,16 @@ public class World {
 //                }
 //            }
 
-        try {
-            layer.paint(g);
-        } catch (Exception ex) {
-        }
+//        try {
+        layer.paint(g);
+//        } catch (Exception ex) {
+//        }
 
         g.setColor(Color.WHITE);
         for (int i = 0; i < nullLayer.length; i++) {
             for (int j = 0; j < nullLayer[0].length; j++) {
                 if (nullLayer[i][j] != -1) {
-                    g.drawRect(i * 16, j * 16, 16, 16);
+                    g.drawRect(i * 16 + layer.getX(), j * 16 + layer.getY(), 16, 16);
                 }
 
             }

@@ -75,6 +75,8 @@ public abstract class AbstractPlayer {
         //ts.setY(ty - Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         //ts.setY(ty + Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
+        
+        g.drawRect((getBlocksX() - context.getWorld().getLayer().getBlocksX()) * 16, (getBlocksY() - context.getWorld().getLayer().getBlocksY()) * 16, 16, 16);
 
         //g.drawRect(getBlocksX() * 16, getBlocksY() * 16, 16, 16);
     }
@@ -121,11 +123,11 @@ public abstract class AbstractPlayer {
         int oldX = getX(), oldY = getY();
         setX(oldX + deltaX);
         setY(oldY + deltaY);
-        if (!context.getWorld().canWalk(getBlocksX(), getBlocksY())) {
-            setX(oldX);
-            setY(oldY);
+        if (!context.getWorld().canWalk(getBlocksX() - context.getWorld().getLayer().getBlocksX(), getBlocksY() - context.getWorld().getLayer().getBlocksY())) {
             stopMoving();
         }
+        setX(oldX);
+        setY(oldY);
     }
 
     public void moveUp() {
@@ -140,9 +142,7 @@ public abstract class AbstractPlayer {
 
     public void moveLeft() {
         sprite.setSpriteQueueSteps(consequences[LEFT_CONSEQUENCE]);
-        //if (context.getLayer().getTile((getX() - STEP) / 16, getBlocksY()).canWalk()) {
         move(-STEP, 0);
-        //}
     }
 
     public void moveRight() {
@@ -150,7 +150,31 @@ public abstract class AbstractPlayer {
         move(STEP, 0);
     }
 
+    //animate without moving
+    public void right() {
+        sprite.setSpriteQueueSteps(consequences[RIGHT_CONSEQUENCE]);
+        move(STEP, 0);
+    }
+
+    //animate without moving
+    public void left() {
+        sprite.setSpriteQueueSteps(consequences[LEFT_CONSEQUENCE]);
+        move(-STEP, 0);
+    }
+
+    //animate without moving
+    public void up() {
+        sprite.setSpriteQueueSteps(consequences[UP_CONSEQUENCE]);
+        move(0, -STEP);
+    }
+
+    //animate without moving
+    public void down() {
+        sprite.setSpriteQueueSteps(consequences[DOWN_CONSEQUENCE]);
+        move(0, STEP);
+    }
+
     public void resetSequence() {
-        sprite.setStep(0);
+        sprite.setStep(STEP);
     }
 }

@@ -1,9 +1,11 @@
 package org.rising.layer;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import org.rising.player.AbstractPlayer;
 import org.rising.tiles.Tile;
 
 /**
@@ -17,6 +19,7 @@ public class TiledLayer extends Layer {
     private final int tileWidth, tileHeight;
     private final int horizontalTilesNumber, verticalTilesNumber;
     private final int paintWidth, paintHeight;
+    private Point destination;
 
     public TiledLayer(BufferedImage image, int tileWidth, int tileHeight,
             int width, int height, int paintWidth, int paintHeight) {
@@ -40,7 +43,15 @@ public class TiledLayer extends Layer {
 
         horizontalTilesNumber = width;
         verticalTilesNumber = height;
-        
+        destination = new Point(0, 0);
+    }
+
+    public Point getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Point destination) {
+        this.destination = destination;
     }
 
     public int getHorizontalTilesNumber() {
@@ -115,19 +126,45 @@ public class TiledLayer extends Layer {
 
     //отрисовка слоя, при этом рисуются только помещающиеся на экран тайлы
     @Override
-    protected void paintLayer(Graphics g) throws ArrayIndexOutOfBoundsException {
+    protected void paintLayer(Graphics g) {
         for (int i = 0; i < paintWidth; i++) {
             for (int j = 0; j < paintHeight; j++) {
-                paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
+//                paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
+                //допустим, карта в -1; 0
+                //тогда нужно рисовать с тайла 1; 0
+                int tileX = (i - getBlocksX() >= map.length) ? map.length - 1 : i - getBlocksX();
+                int tileY = 0;
+
+                int x = i - super.getBlocksX(), y = j - super.getBlocksY();
+
+                if ((x >= 0) && (y >= 0) && (x < horizontalTilesNumber) && (y < verticalTilesNumber)) {
+                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
+                }
             }
         }
     }
 
     protected void paintTile(Graphics g, int x, int y, int id) {
-        g.drawImage(tiles[Math.abs(id)], x, y, null);
+//        g.drawImage(tiles[Math.abs(id)], x + (getX() % Tile.WIDTH), y + (getY() % Tile.HEIGHT), null);
+        int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
+        int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
+        g.drawImage(tiles[Math.abs(id)], x + xRemainder, y + yRemainder, null);
+//        g.drawImage(tiles[Math.abs(id)], x, y, null);
     }
 
     public void moveLeft() {
-        setX(getX() - tileWidth);
+        setX(getX() - AbstractPlayer.STEP);
+    }
+
+    public void moveRight() {
+        setX(getX() + AbstractPlayer.STEP);
+    }
+
+    public void moveUp() {
+        setY(getY() - AbstractPlayer.STEP);
+    }
+
+    public void moveDown() {
+        setY(getY() + AbstractPlayer.STEP);
     }
 }
