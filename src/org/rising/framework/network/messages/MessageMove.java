@@ -4,10 +4,10 @@ package org.rising.framework.network.messages;
  *
  * @author Riseremi
  */
-public class MessageConnected extends Message {
+public class MessageMove extends Message {
     private static final long serialVersionUID = 1L;
- 
-   public MessageConnected(Type type) {
+
+    public MessageMove(Type type) {
         super(type);
     }
 

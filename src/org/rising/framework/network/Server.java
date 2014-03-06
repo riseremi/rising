@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import org.rising.player.AbstractPlayer;
 
 /**
  *
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 public class Server {
     private ServerSocket serverSocket;
     private ArrayList<Connection> clients = new ArrayList<>();
+    //
+    private AbstractPlayer players;
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);

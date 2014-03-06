@@ -1,23 +1,24 @@
 package org.rising.framework.network.messages;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Riseremi
  */
-public class Message {
+public class Message implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final Type type;
-    private final String body;
+
+    public Message(Type type) {
+        this.type = type;
+    }
 
     public Type getType() {
         return type;
     }
 
-    public Message(Type type, String body) {
-        this.type = type;
-        this.body = body;
-    }
-
     public enum Type {
-        BLANK, CONNECTED
+        EMPTY, CONNECTED, KEY_PRESSED
     }
 }
