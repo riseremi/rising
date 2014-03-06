@@ -38,8 +38,7 @@ public class LayerIO {
             }
         }
 
-        System.out.println(world.getNullLayer()[0][0]);
-
+        //skip separator
         br.readLine();
 
         //layer 1

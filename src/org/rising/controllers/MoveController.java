@@ -80,5 +80,11 @@ public class MoveController {
 //                player.setDirection(Direction.RIGHT);
             }
         }
+        
+        if(keys[KeyEvent.VK_D]) {
+            context.getWorld().switchDebug();
+            keys[KeyEvent.VK_D] = false;
+        }
+        
     }
 }

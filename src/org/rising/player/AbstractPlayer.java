@@ -66,18 +66,10 @@ public abstract class AbstractPlayer {
     }
 
     public void paint(Graphics g) {
-        //y - top-left dest corner
-        //y + 16 - down-left
-        //y - Math.abs(tileWidth - playerWidth) - heroPos dest
-
-        int tx = getX()/* - Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH)*/, ty = getY();
+        int tx = getX(), ty = getY();
         Sprite ts = sprite;
         ts.setX(tx);
-        //ts.setY(ty - Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
         ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
-        //ts.setY(ty + Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
-
-        //g.drawRect(getBlocksX() * 16, getBlocksY() * 16, 16, 16);
     }
 
     public int getBlocksX() {
@@ -125,7 +117,6 @@ public abstract class AbstractPlayer {
         setY(oldY + deltaY);
         camera.setX((camera.getX() - deltaX) /*/ Tile.WIDTH * Tile.WIDTH*/);
         camera.setY((camera.getY() - deltaY) /*/ Tile.HEIGHT * Tile.HEIGHT*/);
-//        System.out.println(camera.getX() + ":" + camera.getY());
 
         if (!context.getWorld().canWalk(getBlocksX(), getBlocksY())) {
             stopMoving();
@@ -154,30 +145,6 @@ public abstract class AbstractPlayer {
     public void moveRight() {
         sprite.setSpriteQueueSteps(consequences[RIGHT_CONSEQUENCE]);
         move(STEP, 0);
-    }
-
-    //animate without moving
-    public void right() {
-        sprite.setSpriteQueueSteps(consequences[RIGHT_CONSEQUENCE]);
-        move(-STEP, 0);
-    }
-
-    //animate without moving
-    public void left() {
-        sprite.setSpriteQueueSteps(consequences[LEFT_CONSEQUENCE]);
-        move(STEP, 0);
-    }
-
-    //animate without moving
-    public void up() {
-        sprite.setSpriteQueueSteps(consequences[UP_CONSEQUENCE]);
-        move(0, STEP);
-    }
-
-    //animate without moving
-    public void down() {
-        sprite.setSpriteQueueSteps(consequences[DOWN_CONSEQUENCE]);
-        move(0, -STEP);
     }
 
     public void resetSequence() {

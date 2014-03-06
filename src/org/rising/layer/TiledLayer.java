@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import org.rising.game.Core;
 import org.rising.tiles.Tile;
 
 /**
@@ -132,49 +133,24 @@ public class TiledLayer extends Layer {
         }
     }
 
-    //отрисовка слоя, при этом рисуются только помещающиеся на экран тайлы
     @Override
     protected void paintLayer(Graphics g) {
 
-        //int xRemainder = (getX() - getBlocksX() * Tile.WIDTH) % Tile.WIDTH;
-        //int yRemainder = (getY() - getBlocksY() * Tile.HEIGHT) % Tile.HEIGHT;
-        for (int i = 0; i < paintWidth * 2; i++) {
-            for (int j = 0; j < paintHeight * 2; j++) {
-//                paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
-                //допустим, карта в -1; 0
-                //тогда нужно рисовать с тайла 1; 0
-                int tileX = (i - getBlocksX() >= map.length) ? map.length - 1 : i - getBlocksX();
-                int tileY = 0;
+        int paintW = -Core.getInstance().getCamera().getX() / Tile.WIDTH;
+        int paintH = -Core.getInstance().getCamera().getY() / Tile.HEIGHT;
 
+        for (int i = paintW; i < paintW + paintWidth; i++) {
+            for (int j = paintH; j < paintH + paintHeight; j++) {
                 int x = i - super.getBlocksX(), y = j - super.getBlocksY();
 
                 if ((x >= 0) && (y >= 0) && (x < horizontalTilesNumber) && (y < verticalTilesNumber)) {
-                    paintTile(g, i * tileWidth, j * tileHeight, map[i - (getBlocksX())][j - (getBlocksY())].getId());
+                    paintTile(g, i * tileWidth, j * tileHeight, map[x][y].getId());
                 }
             }
         }
     }
 
     protected void paintTile(Graphics g, int x, int y, int id) {
-//        g.drawImage(tiles[Math.abs(id)], x + (getX() % Tile.WIDTH), y + (getY() % Tile.HEIGHT), null);
-
         g.drawImage(tiles[Math.abs(id)], x, y, null);
-//        g.drawImage(tiles[Math.abs(id)], x, y, null);
     }
-
-//    public void moveLeft() {
-//        setX(getX() - AbstractPlayer.STEP);
-//    }
-//
-//    public void moveRight() {
-//        setX(getX() + AbstractPlayer.STEP);
-//    }
-//
-//    public void moveUp() {
-//        setY(getY() - AbstractPlayer.STEP);
-//    }
-//
-//    public void moveDown() {
-//        setY(getY() + AbstractPlayer.STEP);
-//    }
 }
