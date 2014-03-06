@@ -32,7 +32,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
     private final JFrame frame;
     private final boolean[] keys = new boolean[256];
     private MoveController moveController;
-    private Camera camera;
+    private final Camera camera;
 
     public static Core getInstance() {
         if (instance == null) {
@@ -66,6 +66,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
         setVisible(true);
+        
+        
     }
 
     public Camera getCamera() {
@@ -143,8 +145,14 @@ public class Core extends Canvas implements Runnable, KeyListener {
         game.frame.setVisible(true);
         game.frame.add(game);
         game.addKeyListener(game);
+        
+        LobbyScreen lobby = new LobbyScreen();
+        game.frame.add(lobby);
+        lobby.setVisible(true);
+        
         game.frame.pack();
-        game.init();
+        
+        //game.init();
         game.requestFocus();
     }
 }

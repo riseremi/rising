@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import org.rising.framework.network.messages.Message;
 import org.rising.player.AbstractPlayer;
 
 /**
@@ -56,9 +57,9 @@ public class Server {
                 public void run() {
                     while (true) {
                         try {
-                            Object s = in.readObject();
-                            System.out.println("Client says: " + s.toString());
-                            send("message that should be returned back to the client" + s.toString());
+                            Message s = (Message) in.readObject();
+                            System.out.println("Client says: " + s.getType().name());
+                            Protocol.processMessageOnServerSide(s);
                         } catch (IOException | ClassNotFoundException ex) {
                         }
                     }

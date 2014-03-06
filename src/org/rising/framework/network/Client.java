@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import org.rising.framework.network.messages.Message;
 
 /**
  *
@@ -25,8 +26,9 @@ public class Client {
             public void run() {
                 while (true) {
                     try {
-                        Object s = in.readObject();
-                        System.out.println("Server says: " + s.toString());
+                        Message s = (Message) in.readObject();
+                        System.out.println("Server says: " + s.getType().name());
+                        Protocol.processMessageOnServerSide(s);
                     } catch (IOException | ClassNotFoundException ex) {
                     }
                 }
