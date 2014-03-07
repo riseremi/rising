@@ -11,6 +11,7 @@ import org.rising.game.World;
  * @author Riseremi
  */
 public class PlayerAnimation implements Runnable {
+    private static final long serialVersionUID = 1L;
 
     @Override
     public void run() {

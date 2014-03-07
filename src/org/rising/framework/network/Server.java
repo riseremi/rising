@@ -17,7 +17,8 @@ public class Server {
     private ServerSocket serverSocket;
     private ArrayList<Connection> clients = new ArrayList<>();
     //
-    private AbstractPlayer players;
+    private AbstractPlayer player;
+    private int i;
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -28,7 +29,7 @@ public class Server {
                 while (true) {
                     try {
                         Socket socket = serverSocket.accept();
-                        clients.add(new Connection(socket));
+                        clients.add(new Connection(socket, i++));
                     } catch (IOException ex) {
                     }
                 }
@@ -43,11 +44,17 @@ public class Server {
         }
     }
 
+    public void sendToOne(Object message, int index) throws IOException {
+        clients.get(index).send(message);
+    }
+
     private class Connection {
         private ObjectInputStream in;
         private ObjectOutputStream out;
+        private final int id;
 
-        public Connection(Socket socket) throws IOException {
+        public Connection(Socket socket, final int id) throws IOException {
+            this.id = id;
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
@@ -58,8 +65,8 @@ public class Server {
                     while (true) {
                         try {
                             Message s = (Message) in.readObject();
-                            System.out.println("Client says: " + s.getType().name());
-                            Protocol.processMessageOnServerSide(s);
+                            System.out.println("SERVER RECIEVED: " + s.getType().name());
+                            Protocol.processMessageOnServerSide(s, id);
                         } catch (IOException | ClassNotFoundException ex) {
                         }
                     }

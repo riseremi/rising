@@ -15,6 +15,7 @@ import java.util.List;
  * @author White Oak
  */
 public class Sprite extends Layer {
+    private static final long serialVersionUID = 1L;
 
     private final BufferedImage[] tiles;
     private int[] spriteQueueSteps;

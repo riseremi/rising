@@ -17,6 +17,7 @@ import org.rising.layer.TiledLayer;
  * @author Riseremi
  */
 public class World {
+    private static final long serialVersionUID = 1L;
     private TiledLayer layer;
     private int[][] nullLayer;
     private boolean debug;

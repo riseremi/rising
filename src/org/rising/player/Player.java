@@ -16,6 +16,7 @@ public class Player extends AbstractPlayer {
         {4, 4, 5, 5, 6, 6, 7, 7},
         {8, 8, 9, 9, 10, 10, 11, 11},
         {12, 12, 13, 13, 14, 14, 15, 15}};
+    private static final long serialVersionUID = 1L;
 
     public Player(GameContext context, int hp, int maxHp, int minDamage, int maxDamage, int attack, String name, int speed) throws IOException {
         super(context, hp, maxHp, minDamage, maxDamage, attack, name, speed,

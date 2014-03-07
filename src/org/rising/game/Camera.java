@@ -8,6 +8,7 @@ import java.awt.Point;
  * @author Riseremi
  */
 public class Camera {
+    private static final long serialVersionUID = 1L;
     private int x, y;
     private Point destination;
 

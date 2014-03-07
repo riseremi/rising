@@ -8,6 +8,7 @@ import org.rising.layer.TiledLayer;
  * @author White Oak
  */
 public class GameContext {
+    private static final long serialVersionUID = 1L;
 
     private final World world;
     private final Camera camera;

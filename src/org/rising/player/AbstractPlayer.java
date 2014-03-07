@@ -13,13 +13,15 @@ import org.rising.tiles.Tile;
  * @author Riseremi
  */
 public abstract class AbstractPlayer {
+    private static final long serialVersionUID = 1L;
 
     protected int hp, maxHp;
     protected int minDamage, maxDamage;
     protected int attack;
     protected String name;
     protected int speed;
-    private GameContext context;
+    private final GameContext context;
+
     public final static int STEP = 2;
     private final Sprite sprite;
     private final static int UP_CONSEQUENCE = 3, DOWN_CONSEQUENCE = 1, LEFT_CONSEQUENCE = 2, RIGHT_CONSEQUENCE = 0;
@@ -44,6 +46,10 @@ public abstract class AbstractPlayer {
 
     public Point getDestination() {
         return destination;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Direction getDirection() {
