@@ -14,13 +14,29 @@ import org.rising.player.AbstractPlayer;
  * @author Riseremi
  */
 public class Server {
+
     private ServerSocket serverSocket;
     private ArrayList<Connection> clients = new ArrayList<>();
     //
-    private AbstractPlayer player;
-    private int i;
+    private static final ArrayList<AbstractPlayer> players = new ArrayList<>();
+    //
 
-    public Server(int port) throws IOException {
+    //
+    private int i;
+    private static Server instance;
+
+    public static Server getInstance() {
+        if (instance == null) {
+            try {
+                instance = new Server(7777);
+                return instance;
+            } catch (IOException ex) {
+            }
+        }
+        return instance;
+    }
+
+    private Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
 
         Thread t = new Thread() {
@@ -44,11 +60,20 @@ public class Server {
         }
     }
 
+    public void sendToAllExcludingOne(Object message, int id) throws IOException {
+        for (Connection connection : clients) {
+            if (connection.getId() != id) {
+                connection.send(message);
+            }
+        }
+    }
+
     public void sendToOne(Object message, int index) throws IOException {
         clients.get(index).send(message);
     }
 
-    private class Connection {
+    static class Connection {
+
         private ObjectInputStream in;
         private ObjectOutputStream out;
         private final int id;
@@ -75,8 +100,20 @@ public class Server {
             t.start();
         }
 
+        public int getId() {
+            return id;
+        }
+        
+        
+
         public void send(Object message) throws IOException {
             out.writeObject(message);
         }
+
     }
+
+    public static ArrayList<AbstractPlayer> getPlayers() {
+        return players;
+    }
+
 }

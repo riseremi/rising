@@ -23,12 +23,13 @@ import org.rising.player.Player;
  * @author Riseremi
  */
 public class LobbyScreen extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = 1L;
     private static JList<AbstractPlayer> clients;
     private JTextField nickname, ip, message;
     private JButton server, client, start, send;
     private static JTextArea chatArea;
-    private static ArrayList<AbstractPlayer> pl;
+//    private static ArrayList<AbstractPlayer> players;
     //
     private static Player player;
     //
@@ -38,7 +39,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
 
     public LobbyScreen() {
 //        setPreferredSize(new Dimension(16 * 2 + 192, 380));
-        setPreferredSize(new Dimension(620, 480));
+        setPreferredSize(new Dimension(640, 480));
         nickname = new JTextField("nickname");
         ip = new JTextField("ip");
         message = new JTextField("message");
@@ -55,12 +56,11 @@ public class LobbyScreen extends JPanel implements ActionListener {
         chatArea = new JTextArea(16, 16);
         chatArea.setVisible(false);
 
-        pl = new ArrayList<>();
-
         clients = new JList<>();
 //        clients.setPreferredSize(new Dimension(192, 256));
         clients.setBounds(256, 16 + 26 + 8, 192, 256);
-        clients.setListData(pl.toArray(new AbstractPlayer[pl.size()]));
+        final ArrayList<AbstractPlayer> players = Server.getPlayers();
+        clients.setListData(players.toArray(new AbstractPlayer[players.size()]));
         //clients.setVisible(false);
 
         nickname.setBounds(16, 16, 192, 26);
@@ -98,11 +98,9 @@ public class LobbyScreen extends JPanel implements ActionListener {
             message.setVisible(true);
             send.setVisible(true);
             try {
-                s = new Server(7777);
-                c1 = new Client(7777, "localhost");
+                s = Server.getInstance();
+                c1 = Client.getInstance();
                 c1.send(new MessageConnected());
-
-                s.sendToAll(new MessageChat("INIT: Sieg heil, clients."));
             } catch (IOException ex) {
             }
         }
@@ -116,9 +114,8 @@ public class LobbyScreen extends JPanel implements ActionListener {
             message.setVisible(true);
             send.setVisible(true);
             try {
-                c1 = new Client(7777, "localhost");
+                c1 = Client.getInstance();
                 c1.send(new MessageConnected());
-                c1.send(new MessageChat("INIT: Sieg heil, server."));
             } catch (IOException ex) {
             }
 
@@ -150,8 +147,9 @@ public class LobbyScreen extends JPanel implements ActionListener {
     }
 
     public static void addToClients(AbstractPlayer player) {
-        pl.add(player);
-        clients.setListData(pl.toArray(new AbstractPlayer[pl.size()]));
+        final ArrayList<AbstractPlayer> players = Server.getPlayers();
+        players.add(player);
+        clients.setListData(players.toArray(new AbstractPlayer[players.size()]));
     }
 
     public static void setPlayer(Player p) {

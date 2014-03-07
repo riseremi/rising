@@ -4,17 +4,33 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import org.rising.framework.network.messages.Message;
+import org.rising.player.AbstractPlayer;
 
 /**
  *
  * @author Riseremi
  */
 public class Client {
+
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private static Client instance;
+    private final ArrayList<AbstractPlayer> players = new ArrayList<>();
 
-    public Client(int port, String ip) throws IOException {
+    public static Client getInstance() {
+        if (instance == null) {
+            try {
+                instance = new Client(7777, "localhost");
+                return instance;
+            } catch (IOException ex) {
+            }
+        }
+        return instance;
+    }
+
+    private Client(int port, String ip) throws IOException {
         Socket s = new Socket(ip, port);
 
         out = new ObjectOutputStream(s.getOutputStream());
@@ -37,6 +53,10 @@ public class Client {
         t.start();
     }
 
+    public ArrayList<AbstractPlayer> getPlayers() {
+        return players;
+    }
+    
     public void send(Object message) throws IOException {
         out.writeObject(message);
     }

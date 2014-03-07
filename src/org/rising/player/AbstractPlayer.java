@@ -13,6 +13,7 @@ import org.rising.tiles.Tile;
  * @author Riseremi
  */
 public abstract class AbstractPlayer {
+
     private static final long serialVersionUID = 1L;
 
     protected int hp, maxHp;
@@ -156,4 +157,10 @@ public abstract class AbstractPlayer {
     public void resetSequence() {
         sprite.setStep(STEP);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

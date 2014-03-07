@@ -18,8 +18,8 @@ public class Player extends AbstractPlayer {
         {12, 12, 13, 13, 14, 14, 15, 15}};
     private static final long serialVersionUID = 1L;
 
-    public Player(GameContext context, int hp, int maxHp, int minDamage, int maxDamage, int attack, String name, int speed) throws IOException {
-        super(context, hp, maxHp, minDamage, maxDamage, attack, name, speed,
+    public Player(GameContext context, String name) throws IOException {
+        super(context, 30, 30, 0, 0, 0, name, 0,
                 new Sprite(ImageIO.read(AbstractPlayer.class.getResourceAsStream("/resources/hero.png")), AbstractPlayer.WIDTH, AbstractPlayer.HEIGHT),
                 CONSEQUENCES);
 

@@ -22,6 +22,7 @@ import org.rising.tiles.Tile;
  */
 public class Core extends Canvas implements Runnable, KeyListener {
 //java.lang.ClassFormatError: Incompatible magic value 0 in class file org/rising/player/AbstractPlayer
+
     private static final long serialVersionUID = 1L;
     private final Thread graphicsThread;
     private boolean running = false;
@@ -60,14 +61,13 @@ public class Core extends Canvas implements Runnable, KeyListener {
         }
         camera = new Camera();
         context = new GameContext(world, camera);
-        player = new Player(context, 0, 0, 0, 0, 0, "Player", 100);
+        player = new Player(context, "Player");
 
         player.setBlocksX(world.getLayer().getPaintWidth() / 2);
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
         setVisible(true);
-        
-        
+
     }
 
     public Camera getCamera() {
@@ -145,13 +145,13 @@ public class Core extends Canvas implements Runnable, KeyListener {
         game.frame.setVisible(true);
         game.frame.add(game);
         game.addKeyListener(game);
-        
+
         LobbyScreen lobby = new LobbyScreen();
         game.frame.add(lobby);
         lobby.setVisible(true);
-        
+
         game.frame.pack();
-        
+
         //game.init();
         game.requestFocus();
     }
