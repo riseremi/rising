@@ -19,6 +19,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import org.rising.framework.Utility;
 import org.rising.framework.network.Client;
 import org.rising.framework.network.Server;
 import org.rising.framework.network.messages.Message;
@@ -63,7 +64,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public LobbyScreen() {
 //        setPreferredSize(new Dimension(16 * 2 + 192, 380));
         setPreferredSize(new Dimension(640, 480));
-        nickname = new JTextField("nickname");
+        nickname = new JTextField(Utility.getRandomName());
         ip = new JTextField("localhost");
         ip.setEditable(false);
         message = new JTextField("message");
@@ -223,7 +224,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 
-        //aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
         aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
 
         try {
