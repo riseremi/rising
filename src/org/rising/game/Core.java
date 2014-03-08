@@ -61,7 +61,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
         }
         camera = new Camera();
         context = new GameContext(world, camera);
-        player = new Player(context, "Player");
+        player = new Player(context, "Player", 0);
 
         player.setBlocksX(world.getLayer().getPaintWidth() / 2);
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);

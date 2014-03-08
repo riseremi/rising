@@ -31,6 +31,7 @@ public abstract class AbstractPlayer {
     private volatile Point destination = new Point();
     private Direction direction = Direction.UNDEFINED;
     protected PlayerAnimation playerAnimation;
+    private int id;
 
     public void stopMoving() {
         resetSequence();
@@ -57,7 +58,7 @@ public abstract class AbstractPlayer {
         return direction;
     }
 
-    public AbstractPlayer(GameContext context, int hp, int maxHp, int minDamage, int maxDamage, int attack, String name, int speed, Sprite sprite,
+    public AbstractPlayer(GameContext context, int hp, int maxHp, int minDamage, int maxDamage, int attack, String name, int id, int speed, Sprite sprite,
             int[][] consequences) {
         this.hp = hp;
         this.maxHp = maxHp;
@@ -65,11 +66,16 @@ public abstract class AbstractPlayer {
         this.maxDamage = maxDamage;
         this.attack = attack;
         this.name = name;
+        this.id = id;
         this.speed = speed;
         this.sprite = sprite;
         this.consequences = consequences;
         this.context = context;
         sprite.setSpriteQueueSteps(consequences[RIGHT_CONSEQUENCE]);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void paint(Graphics g) {

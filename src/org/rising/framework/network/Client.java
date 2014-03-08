@@ -18,6 +18,7 @@ public class Client {
     private ObjectOutputStream out;
     private static Client instance;
     private final ArrayList<AbstractPlayer> players = new ArrayList<>();
+    private int id;
 
     public static Client getInstance() {
         if (instance == null) {
@@ -56,7 +57,7 @@ public class Client {
     public ArrayList<AbstractPlayer> getPlayers() {
         return players;
     }
-    
+
     public void send(Object message) throws IOException {
         out.writeObject(message);
     }

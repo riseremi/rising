@@ -45,7 +45,9 @@ public class Server {
                 while (true) {
                     try {
                         Socket socket = serverSocket.accept();
-                        clients.add(new Connection(socket, i++));
+                        final Connection connection = new Connection(socket, i++);
+                        clients.add(connection);
+                        //connection.send(connection.getId());
                     } catch (IOException ex) {
                     }
                 }

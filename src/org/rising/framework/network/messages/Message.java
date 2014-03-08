@@ -20,6 +20,6 @@ public class Message implements Serializable {
 
     public enum Type {
         EMPTY, CONNECTED, KEY_PRESSED, MESSAGE_FROM_SERVER, MESSAGE_FROM_CLIENT,
-        CREATE_PLAYER, MESSAGE_CHAT, MESSAGE_PLAYER
+        CREATE_PLAYER, MESSAGE_CHAT, MESSAGE_PLAYER, MESSAGE_INIT
     }
 }
