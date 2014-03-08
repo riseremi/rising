@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -24,6 +29,7 @@ import org.rising.framework.network.Client;
 import org.rising.framework.network.Server;
 import org.rising.framework.network.messages.Message;
 import org.rising.framework.network.messages.MessageChat;
+import org.rising.framework.network.messages.MessageChatPrivate;
 import org.rising.framework.network.messages.MessageConnected;
 import org.rising.player.AbstractPlayer;
 import org.rising.player.Player;
@@ -35,11 +41,9 @@ import org.rising.player.Player;
 public class LobbyScreen extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-    private static JList<AbstractPlayer> clients;
+    private static JList<AbstractPlayer> clientsList;
     private JTextField nickname, ip, message;
-    private JButton server, client, start, send;
-//    private static JTextArea chatArea;
-//    private static ArrayList<AbstractPlayer> players;
+    private JButton server, client, start, off;
     //
     private static Player player;
     //
@@ -70,58 +74,80 @@ public class LobbyScreen extends JPanel implements ActionListener {
         message = new JTextField("message");
         message.setVisible(false);
 
+        message.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String text = message.getText().trim();
+                    if (!text.isEmpty()) {
+                        c1.send(new MessageChat(player.getName(), text, player.getId()));
+                        message.setText("");
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        });
+
         setLayout(null);
 
         server = getButton("Server", "START_SERVER", 16, 16 + 26 + 26 + 16, 96, 26);
         client = getButton("Client", "START_CLIENT", 16 + 96, 16 + 26 + 26 + 16, 96, 26);
-        send = getButton("send", "SEND_MESSAGE", 16 + 192 - 64, 16 + 8 + 256, 64, 26, false);
+        off = getButton("TERMINATE", "TERMINATE", 16, 16 + 8 + 256 + 26 + 16, 192, 26, false);
 
         tPane = new JTextPane();
-//        EmptyBorder eb = new EmptyBorder(new Insets(10, 10, 10, 10));
-//        tPane.setBorder(eb);
-//        tPane.setMargin(new Insets(5, 5, 5, 5));
         tPane.setBounds(16, 16, 192, 256);
         tPane.setVisible(false);
         tPane.setEditable(false);
         add(tPane);
 
-//        appendToPane(tPane, "TEST", Color.red);
-//        chatArea = new JTextArea(16, 16);
-//        chatArea.setVisible(false);
-//        chatArea.setBounds(16, 16, 192, 256);
-//        chatArea.setLineWrap(true);
-//        chatArea.setWrapStyleWord(true);
-        //add(chatArea);
-        clients = new JList<>();
-//        clients.setPreferredSize(new Dimension(192, 256));
-        clients.setBounds(256, 16, 192, 256);
+        clientsList = new JList<>();
+        clientsList.setBounds(256, 16, 192, 256);
         final ArrayList<AbstractPlayer> players = Server.getPlayers();
-        clients.setListData(players.toArray(new AbstractPlayer[players.size()]));
-        //clients.setVisible(false);
+        clientsList.setListData(players.toArray(new AbstractPlayer[players.size()]));
+
+        MouseListener mouseListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    AbstractPlayer selectedPlayer = clientsList.getSelectedValue();
+                    String text = message.getText().trim();
+                    MessageChatPrivate mcp = new MessageChatPrivate(player.getName(), text, player.getId(), selectedPlayer.getId());
+
+                    try {
+                        if (!text.isEmpty()) {
+                            c1.send(mcp);
+                            message.setText("");
+                        }
+                    } catch (IOException ex) {
+                    }
+
+                }
+            }
+        };
+        clientsList.addMouseListener(mouseListener);
 
         nickname.setBounds(16, 16, 192, 26);
         add(nickname);
         ip.setBounds(16, 16 + 26 + 8, 192, 26);
         add(ip);
 
-        add(clients);
+        add(clientsList);
 
-        message.setBounds(16, 16 + 8 + 256, 192 - 64, 26);
+        message.setBounds(16, 16 + 8 + 256, 192, 26);
         add(message);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(server.getActionCommand())) {
+            off.setVisible(true);
             server.setVisible(false);
             client.setVisible(false);
             ip.setVisible(false);
             nickname.setVisible(false);
-            //
-//            chatArea.setVisible(true);
             tPane.setVisible(true);
             message.setVisible(true);
-            send.setVisible(true);
             try {
                 s = Server.getInstance();
                 c1 = Client.getInstance();
@@ -134,11 +160,8 @@ public class LobbyScreen extends JPanel implements ActionListener {
             client.setVisible(false);
             ip.setVisible(false);
             nickname.setVisible(false);
-            //
-            //chatArea.setVisible(true);
             tPane.setVisible(true);
             message.setVisible(true);
-            send.setVisible(true);
             try {
                 c1 = Client.getInstance();
                 c1.send(new MessageConnected(nickname.getText()));
@@ -146,13 +169,8 @@ public class LobbyScreen extends JPanel implements ActionListener {
             }
 
         }
-
-        if (e.getActionCommand().equals(send.getActionCommand())) {
-            try {
-                c1.send(new MessageChat(player.getName(), message.getText(), player.getId()));
-                message.setText("");
-            } catch (IOException ex) {
-            }
+        if (e.getActionCommand().equals(off.getActionCommand())) {
+           s.terminate();
         }
     }
 
@@ -163,8 +181,6 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public static Player getPlayer() {
         return player;
     }
-    
-    
 
     public static void addToChat(String str, boolean full, Type type) {
         Color color = Color.MAGENTA;
@@ -181,6 +197,9 @@ public class LobbyScreen extends JPanel implements ActionListener {
                 break;
             case CONNECTED:
                 color = CONNECTED;
+                break;
+            case SERVER_INFO:
+                color = SERVER_INFO;
                 break;
         }
         String next = full ? "\r\n" : "";
@@ -199,7 +218,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public static void addToClients(AbstractPlayer player) {
         final ArrayList<AbstractPlayer> players = Server.getPlayers();
         players.add(player);
-        clients.setListData(players.toArray(new AbstractPlayer[players.size()]));
+        clientsList.setListData(players.toArray(new AbstractPlayer[players.size()]));
     }
 
     public static void setPlayer(Player p) {

@@ -6,7 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.rising.framework.network.messages.Message;
+import org.rising.framework.network.messages.MessageTerminate;
 import org.rising.player.AbstractPlayer;
 
 /**
@@ -74,6 +77,13 @@ public class Server {
         clients.get(index).send(message);
     }
 
+    public void terminate() {
+        try {
+            sendToAll(new MessageTerminate());
+        } catch (IOException ex) {
+        }
+    }
+
     static class Connection {
 
         private ObjectInputStream in;
@@ -105,8 +115,6 @@ public class Server {
         public int getId() {
             return id;
         }
-        
-        
 
         public void send(Object message) throws IOException {
             out.writeObject(message);

@@ -166,7 +166,7 @@ public abstract class AbstractPlayer {
 
     @Override
     public String toString() {
-        return name;
+        return name + ": " + id;
     }
 
 }
