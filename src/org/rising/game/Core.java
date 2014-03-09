@@ -1,7 +1,6 @@
 package org.rising.game;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -21,9 +20,10 @@ import org.rising.tiles.Tile;
  * @author Riseremi
  */
 public class Core extends Canvas implements Runnable, KeyListener {
-//java.lang.ClassFormatError: Incompatible magic value 0 in class file org/rising/player/AbstractPlayer
 
     private static final long serialVersionUID = 1L;
+    private static Core game;
+    private static LobbyScreen lobby;
     private final Thread graphicsThread;
     private boolean running = false;
     private final Player player;
@@ -66,8 +66,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
         player.setBlocksX(world.getLayer().getPaintWidth() / 2);
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
+        moveController = new MoveController();
         setVisible(true);
-
     }
 
     public Camera getCamera() {
@@ -79,9 +79,18 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public void init() {
-        running = true;
-        moveController = new MoveController();
+        game.frame.getContentPane().remove(lobby);
+        game.frame.add(game);
+        game.addKeyListener(game);
+        game.setVisible(true);
+        game.frame.revalidate();
+        game.frame.repaint();
+
+
+        //game.frame.pack();
+        game.requestFocus();
         graphicsThread.start();
+        running = true;
     }
 
     public Player getPlayer() {
@@ -95,8 +104,12 @@ public class Core extends Canvas implements Runnable, KeyListener {
     @Override
     public void run() {
         while (running) {
-            update();
-            render();
+            try {
+                //Thread.sleep(10L);
+                update();
+                render();
+            } catch (Exception ex) {
+            }
         }
     }
 
@@ -109,13 +122,15 @@ public class Core extends Canvas implements Runnable, KeyListener {
         }
 
         Graphics2D g = (Graphics2D) bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, 640, 480);
+        //g.setColor(Color.BLACK);
+        //g.fillRect(0, 0, 640, 480);
 
         camera.moveCamera(g);
         world.paint(g);
         player.paint(g);
         camera.unmoveCamera(g);
+        
+        //System.out.println(camera.getX());
 
         g.dispose();
         bs.show();
@@ -131,6 +146,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //System.out.println("psessed");
         keys[e.getKeyCode()] = true;
     }
 
@@ -140,19 +156,21 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        Core game = getInstance();
+        game = getInstance();
         game.frame.setResizable(false);
         game.frame.setVisible(true);
         game.frame.add(game);
-        game.addKeyListener(game);
 
-        LobbyScreen lobby = new LobbyScreen();
+        lobby = new LobbyScreen();
         game.frame.add(lobby);
         lobby.setVisible(true);
+        //game.frame.setContentPane(lobby);
 
         game.frame.pack();
 
-        //game.init();
+        game.init();
         game.requestFocus();
+
+        //game.frame.pack();
     }
 }

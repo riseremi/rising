@@ -3,14 +3,13 @@ package org.rising.framework.network;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.rising.framework.network.messages.Message;
 import org.rising.framework.network.messages.MessageChat;
 import org.rising.framework.network.messages.MessageChatPrivate;
 import org.rising.framework.network.messages.MessageConnected;
 import org.rising.framework.network.messages.MessagePlayer;
 import org.rising.framework.network.messages.MessageServerInfo;
+import org.rising.game.Core;
 import org.rising.game.LobbyScreen;
 import org.rising.player.AbstractPlayer;
 import org.rising.player.Player;
@@ -70,6 +69,9 @@ public class Protocol {
         Message.Type type = message.getType();
 
         switch (type) {
+            case START_GAME:
+                Core.getInstance().init();
+                break;
             case MESSAGE_PLAYER:
                 final MessagePlayer playerMsg = ((MessagePlayer) message);
                 final String nickname = playerMsg.getNickname();
@@ -95,7 +97,6 @@ public class Protocol {
                 LobbyScreen.addToChat(nick, false, type1);
                 LobbyScreen.addToChat(text, true, LobbyScreen.Type.MESSAGE);
                 break;
-
             case SERVER_MESSAGE:
                 LobbyScreen.addToChat(((MessageServerInfo) message).getText(), true, LobbyScreen.Type.SERVER_INFO);
                 break;

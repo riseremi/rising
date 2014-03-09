@@ -9,11 +9,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -31,6 +28,7 @@ import org.rising.framework.network.messages.Message;
 import org.rising.framework.network.messages.MessageChat;
 import org.rising.framework.network.messages.MessageChatPrivate;
 import org.rising.framework.network.messages.MessageConnected;
+import org.rising.framework.network.messages.MessageStartGame;
 import org.rising.player.AbstractPlayer;
 import org.rising.player.Player;
 
@@ -95,6 +93,8 @@ public class LobbyScreen extends JPanel implements ActionListener {
         client = getButton("Client", "START_CLIENT", 16 + 96, 16 + 26 + 26 + 16, 96, 26);
         off = getButton("TERMINATE", "TERMINATE", 16, 16 + 8 + 256 + 26 + 16, 192, 26, false);
 
+        start = getButton("Start", "START", 16, 16 + 8 + 256 + 26 + 16 + 26 + 16, 192, 26, false);
+
         tPane = new JTextPane();
         tPane.setBounds(16, 16, 192, 256);
         tPane.setVisible(false);
@@ -142,6 +142,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(server.getActionCommand())) {
             off.setVisible(true);
+            start.setVisible(true);
             server.setVisible(false);
             client.setVisible(false);
             ip.setVisible(false);
@@ -170,7 +171,15 @@ public class LobbyScreen extends JPanel implements ActionListener {
 
         }
         if (e.getActionCommand().equals(off.getActionCommand())) {
-           s.terminate();
+            s.terminate();
+        }
+
+        if (e.getActionCommand().equals(start.getActionCommand())) {
+            System.out.println("start game s");
+            try {
+                s.sendToAll(new MessageStartGame());
+            } catch (IOException ex) {
+            }
         }
     }
 

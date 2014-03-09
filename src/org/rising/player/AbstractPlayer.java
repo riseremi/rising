@@ -31,7 +31,7 @@ public abstract class AbstractPlayer {
     private volatile Point destination = new Point();
     private Direction direction = Direction.UNDEFINED;
     protected PlayerAnimation playerAnimation;
-    private int id;
+    private final int id;
 
     public void stopMoving() {
         resetSequence();
@@ -126,10 +126,10 @@ public abstract class AbstractPlayer {
         sprite.nextStep();
         int oldX = getX(), oldY = getY();
         int cameraOldX = camera.getX(), cameraOldY = camera.getY();
-        setX(oldX + deltaX);
         setY(oldY + deltaY);
-        camera.setX((camera.getX() - deltaX) /*/ Tile.WIDTH * Tile.WIDTH*/);
-        camera.setY((camera.getY() - deltaY) /*/ Tile.HEIGHT * Tile.HEIGHT*/);
+        setX(oldX + deltaX);
+        camera.setX((cameraOldX - deltaX) /*/ Tile.WIDTH * Tile.WIDTH*/);
+        camera.setY((cameraOldY - deltaY) /*/ Tile.HEIGHT * Tile.HEIGHT*/);
 
         if (!context.getWorld().canWalk(getBlocksX(), getBlocksY())) {
             stopMoving();
@@ -161,12 +161,19 @@ public abstract class AbstractPlayer {
     }
 
     public void resetSequence() {
-        sprite.setStep(STEP);
+        sprite.setStep(0);
     }
 
     @Override
     public String toString() {
         return name + ": " + id;
     }
+
+//    public void setPosition(int x, int y) {
+//        setBlocksX(x);
+//        setBlocksY(y);
+//        context.getCamera().setX(x * Tile.WIDTH);
+//        context.getCamera().setY(y * Tile.HEIGHT);
+//    }
 
 }

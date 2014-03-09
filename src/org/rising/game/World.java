@@ -17,6 +17,7 @@ import org.rising.layer.TiledLayer;
  * @author Riseremi
  */
 public class World {
+
     private static final long serialVersionUID = 1L;
     private TiledLayer layer;
     private int[][] nullLayer;
@@ -38,16 +39,7 @@ public class World {
     }
 
     public void paint(Graphics g) {
-//        for (int x = 0; x < 40; x++) {
-//                for (int y = 0; y < 30; y++) {
-//                    layer.setTile(x, y, nullLayer[x][y]);
-//                }
-//            }
-
-//        try {
         layer.paint(g);
-//        } catch (Exception ex) {
-//        }
 
         if (debug) {
             g.setColor(Color.WHITE);

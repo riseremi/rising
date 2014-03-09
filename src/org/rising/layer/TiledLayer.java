@@ -135,7 +135,6 @@ public class TiledLayer extends Layer {
 
     @Override
     protected void paintLayer(Graphics g) {
-
         int paintW = -Core.getInstance().getCamera().getX() / Tile.WIDTH;
         int paintH = -Core.getInstance().getCamera().getY() / Tile.HEIGHT;
 
