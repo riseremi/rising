@@ -10,11 +10,12 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -50,6 +51,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     static Client c1;
     //
     private static JTextPane tPane;
+
     //colors
     private final static Color MESSAGE = new Color(53, 11, 53);
     private final static Color YOUR_NICK = new Color(209, 85, 119);
@@ -57,6 +59,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     private final static Color CONNECTED = new Color(111, 116, 166);
     private final static Color SERVER_INFO = new Color(145, 169, 81);
     private final static Color USED = new Color(0, 0, 0);
+    private final JScrollPane jsp;
 
     public enum Type {
 
@@ -68,7 +71,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(640, 480));
         nickname = new JTextField(Utility.getRandomName());
         ip = new JTextField("localhost");
-        ip.setEditable(false);
+        //ip.setEditable(false);
         message = new JTextField("message");
         message.setVisible(false);
 
@@ -91,15 +94,20 @@ public class LobbyScreen extends JPanel implements ActionListener {
 
         server = getButton("Server", "START_SERVER", 16, 16 + 26 + 26 + 16, 96, 26);
         client = getButton("Client", "START_CLIENT", 16 + 96, 16 + 26 + 26 + 16, 96, 26);
-        off = getButton("TERMINATE", "TERMINATE", 16, 16 + 8 + 256 + 26 + 16, 192, 26, false);
+        off = getButton("RAGEQUIT", "TERMINATE", 16, 16 + 8 + 256 + 26 + 16, 192, 26, false);
 
         start = getButton("Start", "START", 16, 16 + 8 + 256 + 26 + 16 + 26 + 16, 192, 26, false);
 
         tPane = new JTextPane();
+        jsp = new JScrollPane(tPane);
         tPane.setBounds(16, 16, 192, 256);
-        tPane.setVisible(false);
+        jsp.setBounds(16, 16, 192, 256);
+        jsp.setVisible(false);
         tPane.setEditable(false);
-        add(tPane);
+        add(jsp);
+        
+        jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         clientsList = new JList<>();
         clientsList.setBounds(256, 16, 192, 256);
@@ -142,14 +150,15 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(server.getActionCommand())) {
             off.setVisible(true);
-            start.setVisible(true);
+            //start.setVisible(true);
             server.setVisible(false);
             client.setVisible(false);
             ip.setVisible(false);
             nickname.setVisible(false);
-            tPane.setVisible(true);
+            jsp.setVisible(true);
             message.setVisible(true);
             try {
+                Server.SERVER_IP = ip.getText();
                 s = Server.getInstance();
                 c1 = Client.getInstance();
                 c1.send(new MessageConnected(nickname.getText()));
@@ -164,6 +173,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
             tPane.setVisible(true);
             message.setVisible(true);
             try {
+                Server.SERVER_IP = ip.getText();
                 c1 = Client.getInstance();
                 c1.send(new MessageConnected(nickname.getText()));
             } catch (IOException ex) {

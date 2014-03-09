@@ -23,7 +23,7 @@ public class Client {
     public static Client getInstance() {
         if (instance == null) {
             try {
-                instance = new Client(7777, "localhost");
+                instance = new Client(7777, Server.SERVER_IP);
                 return instance;
             } catch (IOException ex) {
             }

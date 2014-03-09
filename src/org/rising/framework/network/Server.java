@@ -16,6 +16,7 @@ import org.rising.player.AbstractPlayer;
  */
 public class Server {
 
+    public static String SERVER_IP;
     private ServerSocket serverSocket;
     private ArrayList<Connection> clients = new ArrayList<>();
     //

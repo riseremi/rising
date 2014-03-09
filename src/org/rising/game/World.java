@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import org.rising.layer.LayerIO;
 import org.rising.layer.TiledLayer;
+import org.rising.tiles.Tile;
 
 /**
  *
@@ -28,7 +29,7 @@ public class World {
         nullLayer = new int[width][height];
         layer = new TiledLayer(image, tileWidth, tileHeight, width, height, paintWidth, paintHeight);
         try {
-            LayerIO.loadFromFileVersion1("/res/map.rsng", this);
+            LayerIO.loadFromFileVersion1("/res/new_map.rsng", this);
         } catch (IOException ex) {
         }
 
@@ -46,7 +47,7 @@ public class World {
             for (int i = 0; i < nullLayer.length; i++) {
                 for (int j = 0; j < nullLayer[0].length; j++) {
                     if (nullLayer[i][j] != -1) {
-                        g.drawRect(i * 16 + layer.getX(), j * 16 + layer.getY(), 16, 16);
+                        g.drawRect(i * Tile.WIDTH + layer.getX(), j * Tile.WIDTH + layer.getY(), Tile.WIDTH, Tile.WIDTH);
                     }
 
                 }

@@ -27,7 +27,7 @@ public abstract class AbstractPlayer {
     private final Sprite sprite;
     private final static int UP_CONSEQUENCE = 3, DOWN_CONSEQUENCE = 1, LEFT_CONSEQUENCE = 2, RIGHT_CONSEQUENCE = 0;
     private final int[][] consequences;
-    public static final int WIDTH = 20, HEIGHT = 28;
+    public static final int WIDTH = 32, HEIGHT = 32;
     private volatile Point destination = new Point();
     private Direction direction = Direction.UNDEFINED;
     protected PlayerAnimation playerAnimation;
@@ -82,7 +82,8 @@ public abstract class AbstractPlayer {
         int tx = getX(), ty = getY();
         Sprite ts = sprite;
         ts.setX(tx);
-        ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
+//        ts.paint(g, Math.abs(Tile.WIDTH - AbstractPlayer.WIDTH) / 2, Math.abs(Tile.HEIGHT - AbstractPlayer.HEIGHT));
+        sprite.paint(g, 0, 0);
     }
 
     public int getBlocksX() {

@@ -48,25 +48,27 @@ public class Core extends Canvas implements Runnable, KeyListener {
 
     private Core() throws IOException {
         frame = new JFrame("Prototype");
-        setPreferredSize(new Dimension(640, 480));
+//        setPreferredSize(new Dimension(640, 480));
+        setPreferredSize(new Dimension(37 * Tile.WIDTH, 21 * Tile.HEIGHT)); //37 x 21
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         graphicsThread = new Thread(this, "Display");
         Tile.init();
         try {
-            world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/tileset.png")),
-                    Tile.WIDTH, Tile.HEIGHT, LayerIO.mapW, LayerIO.mapH, 41, 31);
+            world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/new_tiles.png")),
+                    Tile.WIDTH, Tile.HEIGHT, LayerIO.mapW, LayerIO.mapH, 38, 22);
         } catch (IOException ex) {
             System.out.println("Cannot create layer.");
         }
         camera = new Camera();
+        //new Thread(camera).start();
+
         context = new GameContext(world, camera);
         player = new Player(context, "Player", 0);
 
         player.setBlocksX(world.getLayer().getPaintWidth() / 2);
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
-        moveController = new MoveController();
         setVisible(true);
     }
 
@@ -79,18 +81,18 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public void init() {
-        game.frame.getContentPane().remove(lobby);
-        game.frame.add(game);
-        game.addKeyListener(game);
-        game.setVisible(true);
-        game.frame.revalidate();
-        game.frame.repaint();
-
+        //game.frame.getContentPane().remove(lobby);
+//        game.frame.add(game);
+//        game.addKeyListener(game);
+        //game.setVisible(true);
+        //game.frame.revalidate();
+        //game.frame.repaint();
 
         //game.frame.pack();
-        game.requestFocus();
-        graphicsThread.start();
+        //game.requestFocus();
         running = true;
+        moveController = new MoveController();
+        graphicsThread.start();
     }
 
     public Player getPlayer() {
@@ -129,9 +131,8 @@ public class Core extends Canvas implements Runnable, KeyListener {
         world.paint(g);
         player.paint(g);
         camera.unmoveCamera(g);
-        
-        //System.out.println(camera.getX());
 
+        //System.out.println(camera.getX());
         g.dispose();
         bs.show();
     }
@@ -146,7 +147,7 @@ public class Core extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //System.out.println("psessed");
+        //System.out.println("pressed");
         keys[e.getKeyCode()] = true;
     }
 
@@ -160,17 +161,12 @@ public class Core extends Canvas implements Runnable, KeyListener {
         game.frame.setResizable(false);
         game.frame.setVisible(true);
         game.frame.add(game);
-
-        lobby = new LobbyScreen();
-        game.frame.add(lobby);
-        lobby.setVisible(true);
-        //game.frame.setContentPane(lobby);
-
+        game.addKeyListener(game);
+        //lobby = new LobbyScreen();
+        //game.frame.add(lobby);
         game.frame.pack();
-
         game.init();
         game.requestFocus();
 
-        //game.frame.pack();
     }
 }

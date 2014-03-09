@@ -11,7 +11,7 @@ import org.rising.game.World;
  * @author Riseremi
  */
 public class LayerIO {
-    public static final int mapW = 40 * 2, mapH = 30 * 2;
+    public static final int mapW = 40 * 3, mapH = 30 * 3;
 
     public static void loadFromFileVersion1(String fileName, World world) throws IOException {
         InputStream reader = LayerIO.class.getResourceAsStream(fileName);
@@ -30,6 +30,8 @@ public class LayerIO {
             for (int j = 0; j < mapW; j++) {
                 mapTemp[j][i] = Integer.parseInt(v[j]);
             }
+            
+            System.out.println(world.getNullLayer()[0].length + ":" + world.getNullLayer().length);
 
             for (int x = 0; x < mapW; x++) {
                 for (int y = 0; y < mapH; y++) {

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Tile {
 
-    public static final int WIDTH = 16, HEIGHT = 16;
+    public static final int WIDTH = 32, HEIGHT = 32;
     public static final Dimension SIZE = new Dimension(WIDTH, HEIGHT);
     protected boolean canWalk;
     protected int id;

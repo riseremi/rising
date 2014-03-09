@@ -8,16 +8,17 @@ import java.awt.Point;
  * @author Riseremi
  */
 public class Camera {
+
     private static final long serialVersionUID = 1L;
     private int x, y;
-    private Point destination;
+    private Point destination1;
 
     public Point getDestination() {
-        return destination;
+        return destination1;
     }
 
     public void setDestination(Point destination) {
-        this.destination = destination;
+        this.destination1 = destination;
     }
 
     public void moveCamera(Graphics g) {
