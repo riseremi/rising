@@ -9,6 +9,7 @@ import org.rising.framework.network.messages.MessageChatPrivate;
 import org.rising.framework.network.messages.MessageConnected;
 import org.rising.framework.network.messages.MessagePlayer;
 import org.rising.framework.network.messages.MessageServerInfo;
+import org.rising.framework.network.messages.MessageSetPosition;
 import org.rising.game.Core;
 import org.rising.game.LobbyScreen;
 import org.rising.player.AbstractPlayer;
@@ -57,6 +58,9 @@ public class Protocol {
                     final MessageChatPrivate message1 = ((MessageChatPrivate) message);
                     Server.getInstance().sendToOne(message1.getMessageChat(), message1.getTarget());
                     break;
+                case SET_POSITION:
+                    Server.getInstance().sendToAll(message);
+                    break;
                 default:
                     throw new Exception("Not supported yet.");
             }
@@ -101,18 +105,22 @@ public class Protocol {
                 LobbyScreen.addToChat(((MessageServerInfo) message).getText(), true, LobbyScreen.Type.SERVER_INFO);
                 break;
             case TERMINATE:
-                LobbyScreen.addToChat("You will be disconnected and turned off after 10 seconds.", true, LobbyScreen.Type.SERVER_INFO);
+                LobbyScreen.addToChat("You will be disconnected and turned off after 5 seconds.", true, LobbyScreen.Type.SERVER_INFO);
                 try {
-                    Thread.sleep(10000L);
+                    Thread.sleep(5000L);
                 } catch (InterruptedException ex) {
                 }
                 System.exit(0);
                 break;
+            case SET_POSITION:
+                MessageSetPosition msp = ((MessageSetPosition) message);
+                final int x = msp.getX();
+                final int y = msp.getY();
+                Core.getInstance().getPlayer().setBlocksX(x);
+                Core.getInstance().getPlayer().setBlocksY(y);
+                break;
             default:
-                try {
-                    throw new Exception("Not supported yet.");
-                } catch (Exception ex) {
-                }
+                throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 

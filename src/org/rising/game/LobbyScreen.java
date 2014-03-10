@@ -150,7 +150,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(server.getActionCommand())) {
             off.setVisible(true);
-            //start.setVisible(true);
+            start.setVisible(true);
             server.setVisible(false);
             client.setVisible(false);
             ip.setVisible(false);

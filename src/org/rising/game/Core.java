@@ -81,15 +81,15 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     public void init() {
-        //game.frame.getContentPane().remove(lobby);
-//        game.frame.add(game);
+        game.frame.remove(lobby);
+        game.frame.add(game);
 //        game.addKeyListener(game);
-        //game.setVisible(true);
-        //game.frame.revalidate();
-        //game.frame.repaint();
+        game.setVisible(true);
+        game.frame.revalidate();
+        game.frame.repaint();
 
-        //game.frame.pack();
-        //game.requestFocus();
+        game.frame.pack();
+        game.requestFocus();
         running = true;
         moveController = new MoveController();
         graphicsThread.start();
@@ -160,12 +160,14 @@ public class Core extends Canvas implements Runnable, KeyListener {
         game = getInstance();
         game.frame.setResizable(false);
         game.frame.setVisible(true);
-        game.frame.add(game);
+        //game.frame.add(game);
         game.addKeyListener(game);
-        //lobby = new LobbyScreen();
-        //game.frame.add(lobby);
+        
+        lobby = new LobbyScreen();
+        game.frame.add(lobby);
+        
         game.frame.pack();
-        game.init();
+        //game.init();
         game.requestFocus();
 
     }

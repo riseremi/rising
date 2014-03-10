@@ -2,6 +2,11 @@ package org.rising.controllers;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.rising.framework.network.Client;
+import org.rising.framework.network.messages.MessageSetPosition;
 import org.rising.game.Camera;
 import org.rising.game.Direction;
 import org.rising.game.GameContext;
@@ -84,6 +89,10 @@ public class MoveController {
         if(keys[KeyEvent.VK_D]) {
             context.getWorld().switchDebug();
             keys[KeyEvent.VK_D] = false;
+            try {
+                Client.getInstance().send(new MessageSetPosition(15, 15));
+            } catch (IOException ex) {
+            }
         }
         
     }
