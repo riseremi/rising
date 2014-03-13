@@ -1,8 +1,10 @@
 package org.rising.game;
 
+import java.awt.AWTException;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
@@ -10,6 +12,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import org.rising.controllers.MoveController;
+import org.rising.framework.network.Client;
+import org.rising.framework.network.messages.MessageMove;
 import org.rising.layer.LayerIO;
 import org.rising.layer.TiledLayer;
 import org.rising.player.Player;
@@ -47,16 +51,19 @@ public class Core extends Canvas implements Runnable, KeyListener {
     }
 
     private Core() throws IOException {
+//        final int W = 37, H = 21;
+        final int W = 20, H = 17;
+
         frame = new JFrame("Prototype");
 //        setPreferredSize(new Dimension(640, 480));
-        setPreferredSize(new Dimension(37 * Tile.WIDTH, 21 * Tile.HEIGHT)); //37 x 21
+        setPreferredSize(new Dimension(W * Tile.WIDTH, H * Tile.HEIGHT)); //37 x 21
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         graphicsThread = new Thread(this, "Display");
         Tile.init();
         try {
             world = new World(ImageIO.read(Core.class.getResourceAsStream("/resources/new_tiles.png")),
-                    Tile.WIDTH, Tile.HEIGHT, LayerIO.mapW, LayerIO.mapH, 38, 22);
+                    Tile.WIDTH, Tile.HEIGHT, LayerIO.mapW, LayerIO.mapH, W + 1, H + 1);
         } catch (IOException ex) {
             System.out.println("Cannot create layer.");
         }
@@ -70,6 +77,15 @@ public class Core extends Canvas implements Runnable, KeyListener {
         player.setBlocksY(world.getLayer().getPaintHeight() / 2);
 
         setVisible(true);
+    }
+
+    public void keyPress(int code) {
+        try {
+            Robot robot = new Robot();
+
+            robot.keyPress(code);
+        } catch (AWTException e) {
+        }
     }
 
     public Camera getCamera() {
@@ -137,6 +153,10 @@ public class Core extends Canvas implements Runnable, KeyListener {
         bs.show();
     }
 
+    public boolean[] getKeys() {
+        return keys;
+    }
+
     public void update() {
         moveController.processMovement(context, player, keys);
     }
@@ -147,8 +167,11 @@ public class Core extends Canvas implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //System.out.println("pressed");
-        keys[e.getKeyCode()] = true;
+        try {
+            //keys[e.getKeyCode()] = true;
+            Client.getInstance().send(new MessageMove(e.getKeyCode()));
+        } catch (IOException ex) {
+        }
     }
 
     @Override
@@ -162,10 +185,10 @@ public class Core extends Canvas implements Runnable, KeyListener {
         game.frame.setVisible(true);
         //game.frame.add(game);
         game.addKeyListener(game);
-        
+
         lobby = new LobbyScreen();
         game.frame.add(lobby);
-        
+
         game.frame.pack();
         //game.init();
         game.requestFocus();

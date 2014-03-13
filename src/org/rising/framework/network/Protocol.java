@@ -7,6 +7,7 @@ import org.rising.framework.network.messages.Message;
 import org.rising.framework.network.messages.MessageChat;
 import org.rising.framework.network.messages.MessageChatPrivate;
 import org.rising.framework.network.messages.MessageConnected;
+import org.rising.framework.network.messages.MessageMove;
 import org.rising.framework.network.messages.MessagePlayer;
 import org.rising.framework.network.messages.MessageServerInfo;
 import org.rising.framework.network.messages.MessageSetPosition;
@@ -59,6 +60,9 @@ public class Protocol {
                     Server.getInstance().sendToOne(message1.getMessageChat(), message1.getTarget());
                     break;
                 case SET_POSITION:
+                    Server.getInstance().sendToAll(message);
+                    break;
+                case MOVE:
                     Server.getInstance().sendToAll(message);
                     break;
                 default:
@@ -118,6 +122,13 @@ public class Protocol {
                 final int y = msp.getY();
                 Core.getInstance().getPlayer().setBlocksX(x);
                 Core.getInstance().getPlayer().setBlocksY(y);
+                break;
+            case MOVE:
+                MessageMove mm = ((MessageMove) message);
+                final int dir = mm.getDirection();
+                //Core.getInstance().getKeys()[dir] = true;
+                //Core.getInstance().keyPressed(new KeyEvent(Core.getInstance(), 0, 0, 0, dir, 'a'));
+                Core.getInstance().keyPress(dir);
                 break;
             default:
                 throw new UnsupportedOperationException("Not supported yet.");

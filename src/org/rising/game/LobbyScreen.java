@@ -151,6 +151,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
         if (e.getActionCommand().equals(server.getActionCommand())) {
             off.setVisible(true);
             start.setVisible(true);
+            
             server.setVisible(false);
             client.setVisible(false);
             ip.setVisible(false);
@@ -170,7 +171,7 @@ public class LobbyScreen extends JPanel implements ActionListener {
             client.setVisible(false);
             ip.setVisible(false);
             nickname.setVisible(false);
-            tPane.setVisible(true);
+            jsp.setVisible(true);
             message.setVisible(true);
             try {
                 Server.SERVER_IP = ip.getText();

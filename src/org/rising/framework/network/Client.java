@@ -43,9 +43,9 @@ public class Client {
             public void run() {
                 while (true) {
                     try {
-                        Message s = (Message) in.readObject();
-                        System.out.println("CLIENT RECIEVED: " + s.getType().name());
-                        Protocol.processMessageOnClientSide(s);
+                        Message message = (Message) in.readObject();
+                        System.out.println("CLIENT RECIEVED: " + message.getType().name());
+                        Protocol.processMessageOnClientSide(message);
                     } catch (IOException | ClassNotFoundException ex) {
                     }
                 }

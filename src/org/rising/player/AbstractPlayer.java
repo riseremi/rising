@@ -6,7 +6,6 @@ import org.rising.game.Camera;
 import org.rising.game.Direction;
 import org.rising.game.GameContext;
 import org.rising.layer.Sprite;
-import org.rising.tiles.Tile;
 
 /**
  *
@@ -36,6 +35,10 @@ public abstract class AbstractPlayer {
     public void stopMoving() {
         resetSequence();
         direction = Direction.UNDEFINED;
+
+//        for (int i = 0; i < Core.getInstance().getKeys().length; i++) {
+//            Core.getInstance().getKeys()[i] = false;
+//        }
     }
 
     public void setDestination(Point destination) {
@@ -176,5 +179,4 @@ public abstract class AbstractPlayer {
 //        context.getCamera().setX(x * Tile.WIDTH);
 //        context.getCamera().setY(y * Tile.HEIGHT);
 //    }
-
 }
